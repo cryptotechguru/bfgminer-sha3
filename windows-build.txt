@@ -69,22 +69,26 @@
 ** Install pkg-config **
 ************************
 
-1.  Visit http://www.gtk.org/download/win32.php
+1.  Visit https://web.archive.org/web/20120304205357/http://www.gtk.org/download/win32.php 
 2.  Search for a version of pkg-config that includes both the Tool and Dev downloads
 3.  Click and download both the Tool link and the Dev link
 4.  Open the pkg-config zip file and extract the bin folder to C:\MinGW
 5.  Open the pkg-config-dev zip file and extract the share folder to C:\MinGW
+6.  See https://stackoverflow.com/questions/1710922/how-to-install-pkg-config-in-windows#comment24027361_1711338 for missing dependencies:
+    I found the needed gtk binaries there too; for pkg-config_0.26-1_win32.zip
+    you need the file libglib-2.0-0.dll from http://ftp.gnome.org/pub/gnome/binaries/win32/glib/2.28/glib_2.28.8-1_win32.zip
+    and intl.dll from http://ftp.gnome.org/pub/gnome/binaries/win32/dependencies/gettext-runtime_0.18.1.1-2_win32.zip
 
 *********************
 ** Install libcurl **
 *********************
+1.  Download source from https://curl.haxx.se/download/curl-7.62.0.zip 
+2.  Unzip to home directory: C:\MinGW\msys\1.0\home\USER (where USER is your user name)
 
-1.  Visit http://curl.haxx.se/download.html#Win32
-2.  Look for the Win32 - Generic heading
-3.  Download the link that indicates both *libcurl* (not just binary) and *SSL*
-4.  Open the zip file and extract the lib, include, and bin folders to C:\MinGW
-5.  Edit C:\MinGW\lib\pkgconfig\libcurl.pc
-6.  Change "-lcurl" to "-lcurl -lcurldll"
+    cd ~/curl-7.62.0
+	./configure --prefix=/MinGW
+	make
+	make install
 
 ************************
 ** Install libjansson **
@@ -99,7 +103,7 @@
 	cd ~/jansson-X.X
 	./configure --prefix=/MinGW
 	make
-	make check
+	make check (might fail but doesn't seem to matter)
 	make install
 
 ********************
@@ -118,7 +122,7 @@
 	make install 
 
 ******************************************************
-** Install libmicrohttpd (optional - Stratum Proxy) **
+** Install libmicrohttpd                            **
 ******************************************************
 
 1.  Visit http://ftp.gnu.org/gnu/libmicrohttpd/
@@ -126,7 +130,7 @@
 3.  Open the zip file and extract the share, lib, include, and bin folders to C:\MinGW
 
 *************************************************
-** Install libevent (optional - Stratum Proxy) **
+** Install libevent                            **
 *************************************************
 
 1.  Visit http://libevent.org/
@@ -137,11 +141,12 @@
 
 	cd ~/libevent-X.Y.Z-stable
 	./configure --disable-openssl --prefix=/MinGW
+    echo "#include <winerror.h>" >> config.h
 	make
 	make install
 
 *******************************************************
-** Install HIDAPI (optional - Hashbuster & Nanofury) **
+** Skip HIDAPI (optional - Hashbuster & Nanofury)    **
 *******************************************************
 
 1.  Visit https://github.com/signal11/hidapi
@@ -213,10 +218,17 @@ struct tcp_keepalive
 2.  Type the following:
 
 	cd ~/
-	git clone git://github.com/luke-jr/bfgminer.git
+	git clone git://github.com/Equibit/bfgminer.git
 	cd bfgminer/
 	./autogen.sh
-	./configure
+	./configure --enable-keccak --enable-cpumining --prefix=/MinGW
+    
+3. If configure fails on not finding the path for usbiodef.h... edit configure 
+4. Search for "inclpath_usbiodef_h"
+5. Add this line immediately after:
+    		inclpath_usbiodef_h="c:/mingw/include/ddk"
+
+    ./configure --enable-keccak --enable-cpumining --prefix=/MinGW
 	make
 
 * Note: see the README for bfgminer ./configure options
@@ -250,23 +262,12 @@ C:\MinGW\msys\1.0\home\USER\bfgminer\libblkmaker\.libs
 
 C:\MinGW\bin
 
-	libcurl.dll
-	libjansson-4.dll
-	libmicrohttpd-10.dll
-	libpdcursesw.dll
-	pthreadGC2.dll
-	libusb-1.0.dll
-	libidn-11.dll
-	libeay32.dll
-	ssleay32.dll
-	libgcc_s_dw2-1.dll
-	libgnutls-28.dll
-	libgcrypt-11.dll
-	libplibc-1.dll
-	libgmp.dll
-	libintl-8.dll
-	libgpg-error-0.dll
-	libiconv-2.dll
-	libevent-2-0-5.dll
-	zlib1.dll
-
+    libcurl-4.dll
+    libevent-2-1-6.dll
+    libgcc_s_dw2-1.dll
+    libjansson-4.dll          
+    libmicrohttpd-12.dll
+    libpdcurses.dll          
+    libpdcursesw.dll
+    libusb-1.0.dll
+    pthreadGC-3.dll
