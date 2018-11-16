@@ -85,10 +85,10 @@
 1.  Download source from https://curl.haxx.se/download/curl-7.62.0.zip 
 2.  Unzip to home directory: C:\MinGW\msys\1.0\home\USER (where USER is your user name)
 
-    cd ~/curl-7.62.0
-    ./configure --prefix=/MinGW
-    make
-    make install
+	cd ~/curl-7.62.0
+	./configure --prefix=/MinGW
+	make
+	make install
 
 ************************
 ** Install libjansson **
@@ -100,11 +100,11 @@
 4.  Click Start and launch MinGW Shell
 5.  Type the following (replace X.X with actual version):
 
-    cd ~/jansson-X.X
-    ./configure --prefix=/MinGW
-    make
-    make check (might fail but doesn't seem to matter)
-    make install
+	cd ~/jansson-X.X
+	./configure --prefix=/MinGW
+	make
+	make check (might fail but doesn't seem to matter)
+	make install
 
 ********************
 ** Install libusb **
@@ -116,10 +116,10 @@
 4.  Return to the MinGW Shell
 5.  Type the following (replace XYZ with actual identifier):
 
-    cd ~/libusb-master-XYZ
-    ./autogen.sh --disable-debug-log --prefix=/MinGW
-    make
-    make install 
+	cd ~/libusb-master-XYZ
+	./autogen.sh --disable-debug-log --prefix=/MinGW
+	make
+	make install 
 
 ******************************************************
 ** Install libmicrohttpd                            **
@@ -139,11 +139,11 @@
 4.  Return to the MinGW Shell
 5.  Type the following (replace X.Y.Z with actual version):
 
-    cd ~/libevent-X.Y.Z-stable
-    ./configure --disable-openssl --prefix=/MinGW
-    echo "#include <winerror.h>" >> config.h
-    make
-    make install
+	cd ~/libevent-X.Y.Z-stable
+	./configure --disable-openssl --prefix=/MinGW
+	echo "#include <winerror.h>" >> config.h
+	make
+	make install
 
 *******************************************************
 ** Skip HIDAPI (optional - Hashbuster & Nanofury)    **
@@ -155,11 +155,11 @@
 4.  Return to the MinGW Shell
 5.  Type the following (replace X.Y.Z with actual version):
 
-    cd ~/hidapi-hidapi-X.Y.Z
-    ./bootstrap
-    ./configure --prefix=/MinGW
-    make
-    make install
+	cd ~/hidapi-hidapi-X.Y.Z
+	./bootstrap
+	./configure --prefix=/MinGW
+	make
+	make install
 
 *****************
 ** Install Git **
@@ -182,7 +182,7 @@ PATH=$PATH:/c/Program\ Files/Git/bin
 3.  Return to the MinGW Shell
 4.  Type the following:
 
-    mv ~/profile.txt ~/.profile
+	mv ~/profile.txt ~/.profile
 
 5.  Restart the MinGW Shell
 
@@ -217,19 +217,19 @@ struct tcp_keepalive
 1.  Return to the MinGW Shell
 2.  Type the following:
 
-    cd ~/
-    git clone git://github.com/Equibit/bfgminer.git
-    cd bfgminer/
-    ./autogen.sh
-    ./configure --enable-keccak --enable-cpumining --prefix=/MinGW
+	cd ~/
+	git clone git://github.com/Equibit/bfgminer.git
+	cd bfgminer/
+	./autogen.sh
+	./configure --enable-keccak --enable-cpumining --prefix=/MinGW
     
 3. If configure fails on not finding the path for usbiodef.h... edit configure 
 4. Search for "inclpath_usbiodef_h"
 5. Add this line immediately after:
-            inclpath_usbiodef_h="c:/mingw/include/ddk"
+    		inclpath_usbiodef_h="c:/mingw/include/ddk"
 
-    ./configure --enable-keccak --enable-cpumining --prefix=/MinGW
-    make
+	./configure --enable-keccak --enable-cpumining --prefix=/MinGW
+	make
 
 * Note: see the README for bfgminer ./configure options
 
@@ -241,24 +241,24 @@ Create a new folder anywhere and copy the following items there:
 
 C:\MinGW\msys\1.0\home\USER\bfgminer
 
-    bfgminer.exe
-    bfgminer-rpc.exe
-    COPYING
-    LICENSE 
-    README*
+	bfgminer.exe
+	bfgminer-rpc.exe
+	COPYING
+	LICENSE 
+	README*
 
 C:\MinGW\msys\1.0\home\USER\bfgminer\opencl
 
-    *.cl
+	*.cl
 
 C:\MinGW\msys\1.0\home\USER\bfgminer\libbase58\.libs
 
-    libbase58-0.dll
+	libbase58-0.dll
 
 C:\MinGW\msys\1.0\home\USER\bfgminer\libblkmaker\.libs  
 
-    libblkmaker-0.1-6.dll
-    libblkmaker_jansson-0.1-6.dll
+	libblkmaker-0.1-6.dll
+	libblkmaker_jansson-0.1-6.dll
 
 C:\MinGW\bin
 
