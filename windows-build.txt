@@ -85,7 +85,7 @@
 1.  Download source from https://curl.haxx.se/download/curl-7.62.0.zip 
 2.  Unzip to home directory: C:\MinGW\msys\1.0\home\USER (where USER is your user name)
 
-    cd ~/curl-7.62.0
+	cd ~/curl-7.62.0
 	./configure --prefix=/MinGW
 	make
 	make install
@@ -141,7 +141,7 @@
 
 	cd ~/libevent-X.Y.Z-stable
 	./configure --disable-openssl --prefix=/MinGW
-    echo "#include <winerror.h>" >> config.h
+	echo "#include <winerror.h>" >> config.h
 	make
 	make install
 
@@ -228,7 +228,7 @@ struct tcp_keepalive
 5. Add this line immediately after:
     		inclpath_usbiodef_h="c:/mingw/include/ddk"
 
-    ./configure --enable-keccak --enable-cpumining --prefix=/MinGW
+	./configure --enable-keccak --enable-cpumining --prefix=/MinGW
 	make
 
 * Note: see the README for bfgminer ./configure options
