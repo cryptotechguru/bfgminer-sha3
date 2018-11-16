@@ -14,3 +14,6 @@
 #endif
 
 #endif
+
+#include <winerror.h>
+
