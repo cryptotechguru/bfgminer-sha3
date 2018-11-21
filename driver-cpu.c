@@ -97,6 +97,7 @@ extern bool scanhash_sse2_64(struct thr_info *, struct work *, uint32_t max_nonc
 extern bool scanhash_sse4_64(struct thr_info *, struct work *, uint32_t max_nonce, uint32_t *last_nonce, uint32_t nonce);
 extern bool scanhash_sse2_32(struct thr_info *, struct work *, uint32_t max_nonce, uint32_t *last_nonce, uint32_t nonce);
 extern bool scanhash_scrypt(struct thr_info *, struct work *, uint32_t max_nonce, uint32_t *last_nonce, uint32_t nonce);
+extern bool scanhash_keccak(struct thr_info *, struct work *, uint32_t max_nonce, uint32_t *last_nonce, uint32_t nonce);
 
 
 #ifdef USE_SHA256D
@@ -137,6 +138,9 @@ const char *algo_names[] = {
 	[ALGO_FASTAUTO] = "fastauto",
 	[ALGO_AUTO] = "auto",
 #endif
+#ifdef USE_KECCAK
+    [ALGO_KECCAK] = "keccak",
+#endif
 };
 
 #ifdef USE_SHA256D
@@ -163,6 +167,9 @@ static const sha256_func sha256_funcs[] = {
 #endif
 #ifdef WANT_X8664_SSE4
 	[ALGO_SSE4_64]		= (sha256_func)scanhash_sse4_64,
+#endif
+#ifdef USE_KECCAK
+    [ALGO_KECCAK] = (sha256_func)scanhash_keccak,
 #endif
 };
 #endif
@@ -817,6 +824,7 @@ CPUSearch:
 	/* scan nonces for a proof-of-work hash */
 	{
 		sha256_func func = scanhash_generic;
+        /*
 		switch (work_mining_algorithm(work)->algo)
 		{
 #ifdef USE_SCRYPT
@@ -833,6 +841,9 @@ CPUSearch:
 			default:
 				break;
 		}
+        */
+        func = scanhash_keccak;
+
 		if (unlikely(!func))
 			applogr(0, LOG_ERR, "%"PRIpreprv": Unknown mining algorithm", thr->cgpu->proc_repr);
 		rc = (*func)(

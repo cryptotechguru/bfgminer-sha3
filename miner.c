@@ -10726,7 +10726,9 @@ bool submit_noffset_nonce(struct thr_info *thr, struct work *work_in, uint32_t n
 
 	/* Do one last check before attempting to submit the work */
 	/* Side effect: sets work->data and work->hash for us */
+    applog(LOG_DEBUG, ">> submit_noffset_nonce");
 	res = test_nonce2(work, nonce);
+    applog(LOG_DEBUG, "<< submit_noffset_nonce");
 	
 	if (unlikely(res == TNR_BAD))
 		{
