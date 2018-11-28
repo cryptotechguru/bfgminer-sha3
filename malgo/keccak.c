@@ -331,6 +331,7 @@ void keccak_hash_data(void * const digest, const void * const pdata)
 	keccak1(digest, (unsigned char*)data, 80);
 }
 
+// Based on scanhash_generic in drive-cpu.c
 bool scanhash_keccak(struct thr_info * const thr, struct work * const work, const uint32_t max_nonce, uint32_t * const last_nonce, uint32_t n)
 {
     applog(LOG_DEBUG, ">> %s scanhash_keccak", thr->cgpu->proc_repr);
@@ -338,7 +339,7 @@ bool scanhash_keccak(struct thr_info * const thr, struct work * const work, cons
     uint8_t * const hash = work->hash;
     uint8_t *data = work->data;
     const uint8_t * const target = work->target;
-    uint32_t * const out_nonce = (uint32_t *)&data[0x4c];
+    uint32_t * const out_nonce = (uint32_t *)&data[76];
     bool ret = false;
 
     const uint32_t hash7_targ = le32toh(((const uint32_t *)target)[7]);
@@ -352,9 +353,11 @@ bool scanhash_keccak(struct thr_info * const thr, struct work * const work, cons
 
         if (unlikely(le32toh(*hash7_tmp) <= hash7_targ))
         {
-            char strhash[32];
-            bin2hex(strhash, hash, 32);
-            applog(LOG_DEBUG, ">> %s scanhash_keccak found a hash! %s", thr->cgpu->proc_repr, strhash);
+            applog(LOG_DEBUG, ">> %s found! htarget %08lx hash %08lx",
+                thr->cgpu->proc_repr,
+                (long unsigned int)hash7_targ,
+                (long unsigned int)*hash7_tmp);
+
             ret = true;
             break;
         }
@@ -441,7 +444,7 @@ char *opencl_get_default_kernel_file_keccak(const struct mining_algorithm * cons
 }
 #endif
 
-static struct mining_algorithm malgo_keccak = {
+struct mining_algorithm malgo_keccak = {
 	.name = "Keccak",
 	.aliases = "Keccak",
 	

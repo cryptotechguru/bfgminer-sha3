@@ -1064,6 +1064,7 @@ void blkchain_init_block(struct blockchain_info * const blkchain)
 }
 
 extern struct mining_algorithm malgo_sha256d;
+extern struct mining_algorithm malgo_keccak;
 
 struct mining_goal_info *get_mining_goal(const char * const name)
 {
@@ -1088,7 +1089,9 @@ struct mining_goal_info *get_mining_goal(const char * const name)
 			.current_diff = 0xFFFFFFFFFFFFFFFFULL,
 		};
 #ifdef USE_SHA256D
-		goal_set_malgo(goal, &malgo_sha256d);
+        //goal_set_malgo(goal, &malgo_sha256d);
+        // EQB_TODO revisit
+        goal_set_malgo(goal, &malgo_keccak);        
 #else
 		// NOTE: Basically random default
 		goal_set_malgo(goal, mining_algorithms);
@@ -10644,6 +10647,8 @@ void work_hash(struct work * const work)
 {
 	const struct mining_algorithm * const malgo = work_mining_algorithm(work);
 	malgo->hash_data_f(work->hash, work->data);
+
+    applog(LOG_DEBUG, ">> work_hash malgo = %s", malgo->name);
 }
 
 static
@@ -10701,6 +10706,8 @@ enum test_nonce2_result _test_nonce2(struct work *work, uint32_t nonce, bool che
 /* Returns true if nonce for work was a valid share */
 bool submit_nonce(struct thr_info *thr, struct work *work, uint32_t nonce)
 {
+    applog(LOG_DEBUG, ">> %s submit_nonce %d", thr->cgpu->proc_repr, nonce);
+
 	return submit_noffset_nonce(thr, work, nonce, 0);
 }
 
@@ -10727,9 +10734,9 @@ bool submit_noffset_nonce(struct thr_info *thr, struct work *work_in, uint32_t n
 
 	/* Do one last check before attempting to submit the work */
 	/* Side effect: sets work->data and work->hash for us */
-    applog(LOG_DEBUG, ">> submit_noffset_nonce");
+    applog(LOG_DEBUG, ">> submit_noffset_nonce %d", nonce);
 	res = test_nonce2(work, nonce);
-    applog(LOG_DEBUG, "<< submit_noffset_nonce");
+    applog(LOG_DEBUG, "<< submit_noffset_nonce %d", res);
 	
 	if (unlikely(res == TNR_BAD))
 		{
