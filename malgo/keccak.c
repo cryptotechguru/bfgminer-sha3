@@ -9,6 +9,8 @@
  * any later version.  See COPYING for more details.
  */
 
+#define SHA3
+
 #include "config.h"
 #include "miner.h"
 
@@ -84,7 +86,11 @@ void keccak1(unsigned char *out, const unsigned char *inraw, unsigned inrawlen)
 	UINT64 Esa, Ese, Esi, Eso, Esu;
 	
 	memcpy(temp, inraw, inrawlen);
-	temp[inrawlen++] = 1;
+#ifdef SHA3
+    temp[inrawlen++] = 0x6;
+#else
+    temp[inrawlen++] = 1;
+#endif
 	memset( temp+inrawlen, 0, 136 - inrawlen);
 	temp[136-1] |= 0x80;
 	const UINT64 *in = (const UINT64 *)temp;

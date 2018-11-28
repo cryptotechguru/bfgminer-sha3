@@ -66,6 +66,7 @@
 #include <curl/curl.h>
 #include <libgen.h>
 #include <sha2.h>
+#include <sha3.h>
 #include <utlist.h>
 
 #include <blkmaker.h>
@@ -12465,8 +12466,19 @@ void renumber_cgpu(struct cgpu_info *cgpu)
 
 static bool my_blkmaker_sha256_callback(void *digest, const void *buffer, size_t length)
 {
-	sha256(buffer, length, digest);
-	return true;
+    sha256(buffer, length, digest);
+    return true;
+}
+
+static bool my_blkmaker_sha3_callback(void *digest, const void *buffer, size_t length)
+{
+    sha3_ctx ctx;
+
+    rhash_sha3_256_init(&ctx);;
+    rhash_sha3_update(&ctx, buffer, length);
+    rhash_sha3_final(&ctx, digest);
+
+    return true;
 }
 
 static
@@ -13260,7 +13272,7 @@ int main(int argc, char *argv[])
 	atexit(bfg_atexit);
 
 	b58_sha256_impl = my_blkmaker_sha256_callback;
-	blkmk_sha256_impl = my_blkmaker_sha256_callback;
+    blkmk_sha256_impl = my_blkmaker_sha3_callback;
 
 	bfg_init_threadlocal();
 #ifndef HAVE_PTHREAD_CANCEL
