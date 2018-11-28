@@ -374,56 +374,6 @@ bool scanhash_keccak(struct thr_info * const thr, struct work * const work, cons
     return ret;
 }
 
-bool scanhash_keccak2(struct thr_info * const thr, struct work * const work,
-    uint32_t max_nonce, uint32_t *last_nonce,
-    uint32_t n)
-{
-    applog(LOG_DEBUG, ">> scanhash_keccak");
-
-    uint8_t *data = work->data;
-    uint8_t * const hash = work->hash;
-    const uint8_t * const ptarget = work->target;
-
-    uint32_t *hash32 = (uint32_t *)hash;
-    uint32_t *nonce = (uint32_t *)(data + 76);
-    unsigned long stat_ctr = 0;
-
-    data += 64;
-
-    // Midstate and data are stored in little endian
-    LOCAL_swap32le(unsigned char, data, 64 / 4);
-    uint32_t *nonce_w = (uint32_t *)(data + 12);
-
-    while (1) {
-        *nonce_w = n;
-
-        // runhash expects int32 data preprocessed into native endian
-        //runhash(hash1, data, midstate);
-        //runhash(hash, hash1, sha256_init_state);
-
-        keccak_hash_data(hash, data);
-
-        stat_ctr++;
-
-        if (unlikely(hash32[7] == 0))
-        {
-            *nonce = htole32(n);
-            *last_nonce = n;
-            applog(LOG_DEBUG, "<< scanhash_keccak return true");
-            return true;
-        }
-
-        if ((n >= max_nonce) || thr->work_restart) {
-            *nonce = htole32(n);
-            *last_nonce = n;
-            applog(LOG_DEBUG, "<< scanhash_keccak return false");
-            return false;
-        }
-
-        n++;
-    }
-}
-
 #ifdef USE_OPENCL
 static
 float opencl_oclthreads_to_intensity_keccak(const unsigned long oclthreads)

@@ -824,7 +824,7 @@ CPUSearch:
 	/* scan nonces for a proof-of-work hash */
 	{
 		sha256_func func = scanhash_generic;
-        /*
+        
 		switch (work_mining_algorithm(work)->algo)
 		{
 #ifdef USE_SCRYPT
@@ -838,11 +838,14 @@ CPUSearch:
 					func = sha256_funcs[opt_algo];
 				break;
 #endif
+#ifdef USE_KECCAK
+            case POW_KECCAK:
+                func = scanhash_keccak;
+                break;
+#endif
 			default:
 				break;
 		}
-        */
-        func = scanhash_keccak;
 
 		if (unlikely(!func))
 			applogr(0, LOG_ERR, "%"PRIpreprv": Unknown mining algorithm", thr->cgpu->proc_repr);
