@@ -54,6 +54,10 @@
 #define WANT_SCRYPT
 #endif
 
+#ifdef USE_KECCAK
+#define WANT_KECCAK
+#endif
+
 enum sha256_algos {
 #ifdef USE_SHA256D
 	ALGO_C,			/* plain C */
@@ -73,6 +77,10 @@ enum sha256_algos {
 #ifdef USE_SHA256D
 	ALGO_FASTAUTO,		/* fast autodetect */
 	ALGO_AUTO,		/* autodetect */
+#endif
+
+#ifdef USE_KECCAK
+    ALGO_KECCAK,
 #endif
 	
 	CUSTOM_CPU_MINING_ALGOS_COUNT,

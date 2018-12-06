@@ -80,7 +80,7 @@ bfgminer_SOURCES := miner.c
 bfgminer_SOURCES += miner.h compat.h  \
 	deviceapi.c deviceapi.h \
 		   util.c util.h logging.h		\
-		   sha2.c sha2.h api.c
+		   sha2.c sha2.h sha3.c sha3.h api.c
 EXTRA_bfgminer_DEPENDENCIES =
 
 TESTS = test-bfgminer.sh

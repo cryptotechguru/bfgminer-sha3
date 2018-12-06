@@ -9,6 +9,8 @@
  * any later version.  See COPYING for more details.
  */
 
+#define SHA3
+
 #include "config.h"
 #include "miner.h"
 
@@ -84,7 +86,11 @@ void keccak1(unsigned char *out, const unsigned char *inraw, unsigned inrawlen)
 	UINT64 Esa, Ese, Esi, Eso, Esu;
 	
 	memcpy(temp, inraw, inrawlen);
-	temp[inrawlen++] = 1;
+#ifdef SHA3
+    temp[inrawlen++] = 0x6;
+#else
+    temp[inrawlen++] = 1;
+#endif
 	memset( temp+inrawlen, 0, 136 - inrawlen);
 	temp[136-1] |= 0x80;
 	const UINT64 *in = (const UINT64 *)temp;
@@ -325,6 +331,49 @@ void keccak_hash_data(void * const digest, const void * const pdata)
 	keccak1(digest, (unsigned char*)data, 80);
 }
 
+// Based on scanhash_generic in drive-cpu.c
+bool scanhash_keccak(struct thr_info * const thr, struct work * const work, const uint32_t max_nonce, uint32_t * const last_nonce, uint32_t n)
+{
+    applog(LOG_DEBUG, ">> %s scanhash_keccak", thr->cgpu->proc_repr);
+    
+    uint8_t * const hash = work->hash;
+    uint8_t *data = work->data;
+    const uint8_t * const target = work->target;
+    uint32_t * const out_nonce = (uint32_t *)&data[76];
+    bool ret = false;
+
+    const uint32_t hash7_targ = le32toh(((const uint32_t *)target)[7]);
+    uint32_t * const hash7_tmp = &((uint32_t *)hash)[7];
+
+    while (true)
+    {
+        *out_nonce = n;
+
+        keccak_hash_data(hash, data);
+
+        if (unlikely(le32toh(*hash7_tmp) <= hash7_targ))
+        {
+            applog(LOG_DEBUG, ">> %s found! htarget %08lx hash %08lx",
+                thr->cgpu->proc_repr,
+                (long unsigned int)hash7_targ,
+                (long unsigned int)*hash7_tmp);
+
+            ret = true;
+            break;
+        }
+
+        if ((n >= max_nonce) || thr->work_restart)
+            break;
+
+        n++;
+    }
+
+    applog(LOG_DEBUG, "<< %s scanhash_keccak return %d %d", thr->cgpu->proc_repr, ret, n);
+
+    *last_nonce = n;
+    return ret;
+}
+
 #ifdef USE_OPENCL
 static
 float opencl_oclthreads_to_intensity_keccak(const unsigned long oclthreads)
@@ -345,7 +394,7 @@ char *opencl_get_default_kernel_file_keccak(const struct mining_algorithm * cons
 }
 #endif
 
-static struct mining_algorithm malgo_keccak = {
+struct mining_algorithm malgo_keccak = {
 	.name = "Keccak",
 	.aliases = "Keccak",
 	
