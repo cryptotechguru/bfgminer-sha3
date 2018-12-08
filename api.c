@@ -37,7 +37,9 @@
 #include "miner.h"
 #include "util.h"
 #include "driver-cpu.h" /* for algo_names[], TODO: re-factor dependency */
+#ifdef USE_OPENCL
 #include "driver-opencl.h"
+#endif
 
 #define HAVE_AN_FPGA 1
 

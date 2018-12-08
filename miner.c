@@ -80,7 +80,9 @@
 #include "miner.h"
 #include "adl.h"
 #include "driver-cpu.h"
+#ifdef USE_OPENCL
 #include "driver-opencl.h"
+#endif
 #include "util.h"
 
 #ifdef USE_AVALON
