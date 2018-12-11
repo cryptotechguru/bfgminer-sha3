@@ -1,2 +1,1 @@
-./configure --enable-keccak --enable-opencl
-
+./configure --enable-keccak --enable-opencl --disable-other-drivers
