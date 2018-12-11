@@ -80,7 +80,9 @@
 #include "miner.h"
 #include "adl.h"
 #include "driver-cpu.h"
+#ifdef USE_OPENCL
 #include "driver-opencl.h"
+#endif
 #include "util.h"
 
 #ifdef USE_AVALON
@@ -13362,7 +13364,7 @@ int main(int argc, char *argv[])
 	strcpy(cgminer_path, dirname(s));
 	free(s);
 	strcat(cgminer_path, "/");
-#if defined(USE_CPUMINING) && defined(WIN32)
+#if defined(USE_CPUMINING) && defined(WIN32) && defined(USE_SHA256D)
 	{
 		char buf[32];
 		int gev = GetEnvironmentVariable("BFGMINER_BENCH_ALGO", buf, sizeof(buf));
