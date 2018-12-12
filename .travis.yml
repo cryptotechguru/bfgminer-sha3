@@ -16,6 +16,6 @@ matrix:
   exclude:
     - compiler: gcc
 install:
-  - bash .travis.deps I-am-okay-with-destroying-my-system
+  - bash .travis.deps
 script:
-  - bash .travis.script I-am-okay-with-destroying-my-system
+  - bash .travis.script
