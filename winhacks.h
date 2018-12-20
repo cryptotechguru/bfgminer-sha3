@@ -17,3 +17,6 @@
 
 #include <winerror.h>
 
+#ifdef interface
+#undef interface
+#endif

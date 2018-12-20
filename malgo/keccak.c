@@ -334,7 +334,7 @@ void keccak_hash_data(void * const digest, const void * const pdata)
 // Based on scanhash_generic in drive-cpu.c
 bool scanhash_keccak(struct thr_info * const thr, struct work * const work, const uint32_t max_nonce, uint32_t * const last_nonce, uint32_t n)
 {
-    applog(LOG_DEBUG, ">> %s scanhash_keccak", thr->cgpu->proc_repr);
+    // applog(LOG_DEBUG, ">> %s scanhash_keccak", thr->cgpu->proc_repr);
     
     uint8_t * const hash = work->hash;
     uint8_t *data = work->data;
@@ -353,10 +353,10 @@ bool scanhash_keccak(struct thr_info * const thr, struct work * const work, cons
 
         if (unlikely(le32toh(*hash7_tmp) <= hash7_targ))
         {
-            applog(LOG_DEBUG, ">> %s found! htarget %08lx hash %08lx",
-                thr->cgpu->proc_repr,
-                (long unsigned int)hash7_targ,
-                (long unsigned int)*hash7_tmp);
+            //applog(LOG_DEBUG, ">> %s found! htarget %08lx hash %08lx",
+            //    thr->cgpu->proc_repr,
+            //    (long unsigned int)hash7_targ,
+            //    (long unsigned int)*hash7_tmp);
 
             ret = true;
             break;
@@ -368,7 +368,7 @@ bool scanhash_keccak(struct thr_info * const thr, struct work * const work, cons
         n++;
     }
 
-    applog(LOG_DEBUG, "<< %s scanhash_keccak return %d %d", thr->cgpu->proc_repr, ret, n);
+    //applog(LOG_DEBUG, "<< %s scanhash_keccak return %d %d", thr->cgpu->proc_repr, ret, n);
 
     *last_nonce = n;
     return ret;

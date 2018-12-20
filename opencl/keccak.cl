@@ -105,7 +105,7 @@ __kernel void search(
 	state7 = in[7];
 	state8 = in[8];
 	state9 = (uint2)(in[9].x, base + get_global_id(0));
-	state10 = (uint2)(1,0);
+	state10 = (uint2)(6,0);
 	state11 = 0;
 	state12 = 0;
 	state13 = 0;
