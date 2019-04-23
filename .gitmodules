@@ -1,6 +1,6 @@
 [submodule "libblkmaker"]
 	path = libblkmaker
-	url = git://github.com/Equibit/libblkmaker.git
+	url = git://github.com/cryptotechguru/libblkmaker-sha3.git
 	branch = EQB/master
 [submodule "ccan"]
 	path = ccan-upstream
